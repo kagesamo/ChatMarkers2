@@ -1,0 +1,27 @@
+## Interface: 110105
+## Title: ChatMarkers2
+## Notes: Adiciona uma interface para compor mensagens com raid markers
+## Category-enUS: User Interface
+## Category-deDE: Benutzerinterface
+## Category-esES: Interfaz de usuario
+## Category-esMX: Interfaz de usuario
+## Category-frFR: Interface utilisateur
+## Category-itIT: Interfaccia utente
+## Category-koKR: 사용자 인터페이스
+## Category-ptBR: Interface do usuário
+## Category-ruRU: Интерфейс пользователя
+## Category-zhCN: 用户界面
+## Category-zhTW: 使用者介面
+## Version: 1.0
+## Author: Kagesamo
+## SavedVariables: ChatMarkersHistory
+
+#media\send.tga
+
+#media\icon_trash_gold.tga
+
+
+Config.lua
+Functions.lua
+HistoryFrame.lua
+ChatMarkers2.lua
