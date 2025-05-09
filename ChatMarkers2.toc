@@ -16,11 +16,6 @@
 ## Author: Kagesamo
 ## SavedVariables: ChatMarkersHistory
 
-#media\send.tga
-
-#media\icon_trash_gold.tga
-
-
 Config.lua
 Functions.lua
 HistoryFrame.lua
