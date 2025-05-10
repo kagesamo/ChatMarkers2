@@ -31,7 +31,7 @@ function CreateHistoryFrame()
     title:SetPoint("CENTER", header, "CENTER", 0, -1)
     title:SetFont("Fonts\\ARIALN.TTF", 14, "OUTLINE")
     title:SetTextColor(1, 0.8, 0)
-    title:SetText("Histórico")
+    title:SetText("HISTORY")
 
     -- close
     local closeBtn = CreateFrame("Button", nil, historyFrame, "UIPanelCloseButton")
@@ -41,12 +41,12 @@ function CreateHistoryFrame()
 
     -- scroll
     scrollArea = CreateFrame("ScrollFrame", nil, historyFrame, "UIPanelScrollFrameTemplate")
-    scrollArea:SetSize(285,94)
-    scrollArea:SetPoint("TOPLEFT",5,-22)
+    scrollArea:SetSize(285,113)
+    scrollArea:SetPoint("TOPLEFT",5,-23)
     scrollContent = CreateFrame("Frame", nil, scrollArea)
-    scrollContent:SetSize(285,94)
+    scrollContent:SetSize(285,113)
     scrollArea:SetScrollChild(scrollContent)
-
+--[[
     -- botão Limpar Tudo
     local clearBtn = CreateFrame("Button", nil, historyFrame)
     clearBtn:SetSize(90, 17)
@@ -66,7 +66,7 @@ function CreateHistoryFrame()
         ShowHistoryWindow()
     end)
 
-
+ ]]
 
 --[[
     local clearBtn = CreateFrame("Button", nil, historyFrame, "UIPanelButtonTemplate")
@@ -110,61 +110,28 @@ function ShowHistoryWindow()
         text:SetWidth(260)
         text:SetJustifyH("LEFT")
         text:SetText( ReplaceMarkersWithIcons(msg) )
---[[
-        -- botão Apagar
 
-        local deleteBtn = CreateFrame("Button", nil, row, "UIPanelCloseButton")
-        deleteBtn:SetSize(14, 14)
-        deleteBtn:SetPoint("RIGHT", -15, 0)
-        SetupDelayedTooltip(deleteBtn, "Apagar")
-        deleteBtn:SetScript("OnClick", function()
-            table.remove(ChatMarkersHistory, i)
-            ShowHistoryWindow()
-        end)
-]]
         -- botão Apagar
         local deleteBtn = CreateFrame("Button", nil, row)
         deleteBtn:SetSize(12, 12)
         deleteBtn:SetPoint("RIGHT", -15, 0)
-        deleteBtn:SetNormalTexture("Interface\\AddOns\\ChatMarkers2\\media\\icon_trash_gold.blp")
-
+        deleteBtn:SetNormalTexture("Interface\\AddOns\\ChatMarkers2\\media\\trash_gold.tga")
         deleteBtn:SetHighlightTexture("Interface\\Buttons\\WHITE8x8")
         local highlight = deleteBtn:GetHighlightTexture()
-        highlight:SetAllPoints(false)
         highlight:SetPoint("TOPLEFT", 2, -2)
         highlight:SetPoint("BOTTOMRIGHT", -2, 2)
         highlight:SetVertexColor(1, 0, 0, 0.4)  -- vermelho translúcido
-
         SetupDelayedTooltip(deleteBtn, "Apagar")
-
         deleteBtn:SetScript("OnClick", function()
             table.remove(ChatMarkersHistory, i)
             ShowHistoryWindow()
         end)
 
---[[
-        -- botão Reenviar
-        local resendBtn = CreateFrame("Button", nil, row, "UIPanelScrollUpButtonTemplate")
-        resendBtn:SetSize(14, 14)
-        resendBtn:SetPoint("RIGHT", 0, 0)
-        SetupDelayedTooltip(resendBtn, "Reenviar")
-        resendBtn:SetScript("OnClick", function()
-            if IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
-                SendChatMessage(msg, "INSTANCE_CHAT")
-            elseif IsInRaid() then
-                SendChatMessage(msg, "RAID")
-            elseif IsInGroup() then
-                SendChatMessage(msg, "PARTY")
-            else
-                print("Não estás num grupo, raid ou instância.")
-            end
-        end)
-]]
         -- botão Reenviar
         local resendBtn = CreateFrame("Button", nil, row)
         resendBtn:SetSize(12, 12)
         resendBtn:SetPoint("RIGHT", 0, 0)
-        resendBtn:SetNormalTexture("Interface\\AddOns\\ChatMarkers2\\media\\send.tga")
+        resendBtn:SetNormalTexture("Interface\\AddOns\\ChatMarkers2\\media\\send_gold.tga")
         resendBtn:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight")
         SetupDelayedTooltip(resendBtn, "Reenviar")
         resendBtn:SetScript("OnClick", function()
