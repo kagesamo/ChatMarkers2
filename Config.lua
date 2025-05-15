@@ -13,48 +13,68 @@ MAX_HISTORY = 50
 -- Cor de fundo da frame principal
 --FRAME_BACKGROUND_COLOR = { r = 0, g = 0, b = 0, a = 0.8 }
 
---ChatMarkersConfig = ChatMarkersConfig or {enabled = true, scale = 1.0}
+--ChatMarkersConfig = ChatMarkersConfig or {tooltip_delay = 0.8, tooltip_size = 0.8, max_history = 50}
 
-local category = Settings.RegisterVerticalLayoutCategory("ChatMarker")
+-- Garante que a tabela está inicializada
+ChatMarkersConfig = ChatMarkersConfig or {
+    tooltip_delay = 0.8,
+    tooltip_size = 0.8,
+    max_history = 50,
+}
 
-local function OnSettingChanged(setting, value)
-	print("Setting changed:", setting:GetVariable(), value)
+-- Funções de callback (podes personalizar)
+local function OnTooltipDelayChanged(_, value)
+    ChatMarkersConfig.tooltip_delay = value
+    -- Exemplo: atualizar lógica que usa o delay
+    print("Novo delay do tooltip:", value)
 end
 
-
-local name = "Test Checkbox"
-local variable = "ChatMarkersConfig_Toggle"
-local variableKey = "toggle"
-local variableTbl = ChatMarkersConfig
-local defaultValue = true
-
---local setting = Settings.RegisterAddOnSetting(category, variable, variableKey, variableTbl, type(defaultValue), name, defaultValue)
-local setting = Settings.RegisterAddOnSetting(category, "ChatMarkersConfig_Toggle", "toggle", ChatMarkersConfig, type(true), "Test Checkbox", true)
-setting:SetValueChangedCallback(OnSettingChanged)
-
-local tooltip = "This is a tooltip for the checkbox."
-Settings.CreateCheckbox(category, setting, tooltip)
-
-
-local minValue = 90
-local maxValue = 360
-local step = 10
-
-local function GetValue()
-	return ChatMarkersConfig.slider or 180
+local function OnTooltipSizeChanged(_, value)
+    ChatMarkersConfig.tooltip_size = value
+    -- Exemplo: redimensionar tooltip ou frame
+    if ChatMarkersTooltip then
+        ChatMarkersTooltip:SetScale(value)
+    end
+    print("Nova escala do tooltip:", value)
 end
 
-local function SetValue(value)
-	ChatMarkersConfig.slider = value
+local function OnMaxHistoryChanged(_, value)
+    ChatMarkersConfig.max_history = value
+    -- Exemplo: cortar o histórico se já estiver acima do novo limite
+    if ChatMarkersHistory then
+        while #ChatMarkersHistory > value do
+            table.remove(ChatMarkersHistory)
+        end
+    end
+    print("Novo tamanho máximo do histórico:", value)
 end
 
-local setting = Settings.RegisterProxySetting(category, "ChatMarkersConfig_Slider", type(180), "Test Slider", 180, GetValue, SetValue)
-setting:SetValueChangedCallback(OnSettingChanged)
+-- Criação da categoria
+local category = Settings.RegisterVerticalLayoutCategory("ChatMarkers2")
 
-local tooltip = "This is a tooltip for the slider."
-local options = Settings.CreateSliderOptions(minValue, maxValue, step)
-options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right);
-Settings.CreateSlider(category, setting, options, tooltip)
+-- TOOLTIP_DELAY
+do
+    local setting = Settings.RegisterAddOnSetting(category, "Atraso do Tooltip", ChatMarkersConfig, "tooltip_delay", Settings.VarType.Number, 0.8)
+    Settings.SetOnValueChangedCallback(setting, OnTooltipDelayChanged)
+    local tooltip = "Tempo de atraso para mostrar o tooltip (em segundos)."
+    Settings.CreateSlider(category, setting, tooltip, 0.0, 2.0, 0.1)
+end
 
+-- TOOLTIP_SIZE
+do
+    local setting = Settings.RegisterAddOnSetting(category, "Tamanho do Tooltip", ChatMarkersConfig, "tooltip_size", Settings.VarType.Number, 0.8)
+    Settings.SetOnValueChangedCallback(setting, OnTooltipSizeChanged)
+    local tooltip = "Escala do tooltip (0.5 a 1.5)."
+    Settings.CreateSlider(category, setting, tooltip, 0.5, 1.5, 0.1)
+end
 
+-- MAX_HISTORY
+do
+    local setting = Settings.RegisterAddOnSetting(category, "Tamanho do Histórico", ChatMarkersConfig, "max_history", Settings.VarType.Number, 50)
+    Settings.SetOnValueChangedCallback(setting, OnMaxHistoryChanged)
+    local tooltip = "Número máximo de entradas no histórico."
+    Settings.CreateSlider(category, setting, tooltip, 10, 100, 1)
+end
+
+-- Registar no painel
 Settings.RegisterAddOnCategory(category)

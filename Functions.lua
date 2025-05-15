@@ -1,4 +1,10 @@
-ChatMarkersConfig = ChatMarkersConfig or {enabled = true, scale = 1.0}
+--[[ 
+ChatMarkersConfig = ChatMarkersConfig or {
+    tooltip_delay = 0.8,
+    tooltip_size = 0.8,
+    max_history = 50,
+} 
+]]
 
 -- FUNÇÂO TOOLTIP --
 function SetupDelayedTooltip(button, text)

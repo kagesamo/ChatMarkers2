@@ -1,5 +1,3 @@
-
-
 -- === Dados dos ícones ===
 local markers = {
     { icon = "Interface\\TargetingFrame\\UI-RaidTargetingIcon_1", tag = "{star} " },
