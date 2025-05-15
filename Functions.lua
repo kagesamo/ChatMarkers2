@@ -1,3 +1,5 @@
+ChatMarkersConfig = ChatMarkersConfig or {enabled = true, scale = 1.0}
+
 -- FUNÇÂO TOOLTIP --
 function SetupDelayedTooltip(button, text)
     local showTooltipTimer  -- Guarda o temporizador para poder cancelá-lo depois
