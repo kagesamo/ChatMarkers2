@@ -33,7 +33,7 @@ frame:EnableMouse(true)
 frame:RegisterForDrag("LeftButton")
 frame:SetScript("OnDragStart", frame.StartMoving)
 frame:SetScript("OnDragStop", frame.StopMovingOrSizing)
-frame:SetBackdrop({bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background-Dark", tile = true})
+frame:SetBackdrop({ bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background-Dark", tile = true })
 
 -- === Caixa de texto ===
 local editBox = CreateFrame("EditBox", nil, frame, "BackdropTemplate")
@@ -52,7 +52,7 @@ editBox:SetBackdrop({
 editBox:SetBackdropColor(1, 1, 1, 0.1)
 editBox:SetBackdropBorderColor(0.5, 0.5, 0.5, 0.8)
 
--- === Funções para criação de botões ===
+-- === Funções de botões ===
 local function CreateMarkerButton(parent, texturePath, tag, size, x, y)
     local btn = CreateFrame("Button", nil, parent, "BackdropTemplate")
     btn:SetSize(size, size)
@@ -94,7 +94,7 @@ local function CreateCustomButton(parent, label, tag, size, x, y)
     end)
 end
 
--- === Posicionamento dos botões personalizados e de marcadores ===
+-- === Colocação dos botões ===
 local buttonSize = 18
 local customBtnSize = 18
 local spacing = 4
@@ -112,7 +112,6 @@ for i, btnInfo in ipairs(customButtons) do
         customStartY - row * (customBtnSize + customSpacing))
 end
 
--- Marker buttons à direita
 local markerStartX = customStartX + (customCols * (customBtnSize + customSpacing))
 local buttonsPerRow = 4
 
@@ -124,8 +123,7 @@ for i, marker in ipairs(markers) do
         offsetY - row * (buttonSize + spacing))
 end
 
-
--- === Botões de ação: Enviar + Limpar ===
+-- === Botões de ação: ENVIAR / LIMPAR ===
 local actionFrame = CreateFrame("Frame", nil, frame)
 actionFrame:SetSize(220, 20)
 actionFrame:SetPoint("BOTTOM", frame, "BOTTOM", 0, 10)
@@ -146,7 +144,6 @@ local function CreateActionButton(parent, label, callback)
     btn.text:SetText(label)
     btn:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight")
     btn:SetScript("OnClick", callback)
-
     return btn
 end
 
@@ -154,16 +151,12 @@ local sendBtn = CreateActionButton(actionFrame, "ENVIAR", function()
     local msg = editBox:GetText()
     local hf = GetHistoryFrame()
     if msg ~= "" then
-        -- Salvar no histórico
-        table.insert(ChatMarkersHistory, 1, msg)
+        AddToHistory(msg)
         if hf:IsShown() then
-            ShowHistoryWindow() -- Recarrega a lista
+            ShowHistoryWindow()
         else
             ShowHistoryWindow()
             hf:Hide()
-        end
-        if #ChatMarkersHistory > MAX_HISTORY then
-            table.remove(ChatMarkersHistory)
         end
     end
 
@@ -177,7 +170,6 @@ local sendBtn = CreateActionButton(actionFrame, "ENVIAR", function()
         print("Não estás num grupo, raid ou instância.")
     end
 end)
-
 sendBtn:SetPoint("TOPLEFT", frame, "TOPRIGHT", -82, -7)
 sendBtn:SetBackdropColor(0.1, 0.5, 0.1)
 
@@ -188,7 +180,7 @@ end)
 clearBtn:SetPoint("TOP", sendBtn, "BOTTOM", 0, -2)
 clearBtn:SetBackdropColor(0.4, 0.1, 0.1)
 
--- === Botão de destacar ===
+-- === Botão para copiar ===
 local copyBtn = CreateFrame("Button", nil, frame, "BackdropTemplate")
 copyBtn:SetSize(14, 14)
 copyBtn:SetPoint("LEFT", editBox, "RIGHT", 0, 0)
@@ -202,13 +194,10 @@ copyBtn:SetBackdropColor(0.15, 0.15, 0.15, 0.8)
 copyBtn:SetBackdropBorderColor(0.5, 0.5, 0.5, 0.8)
 copyBtn:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight")
 SetupDelayedTooltip(copyBtn, "Destacar")
-
--- Função ao clicar no botão de copiar
 copyBtn:SetScript("OnClick", function()
     editBox:HighlightText()
     editBox:SetFocus()
 end)
-
 
 -- === Botão flutuante ===
 local floatingBtn = CreateFrame("Button", "ChatMarkersFloatingButton", UIParent, "BackdropTemplate")
@@ -242,7 +231,5 @@ floatingBtn:SetScript("OnClick", function(self, button)
     end
 end)
 
-
 frame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
-
 frame:Hide()

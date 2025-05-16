@@ -1,7 +1,7 @@
--- tabela global de histórico (herdada de ChatMarkers.lua)
+-- Tabela global de histórico
 ChatMarkersHistory = ChatMarkersHistory or {}
 
--- cria a frame e o scroll, idempotentemente
+-- Frame de histórico e scroll
 local historyFrame, scrollArea, scrollContent
 
 function CreateHistoryFrame()
@@ -13,13 +13,13 @@ function CreateHistoryFrame()
     historyFrame:SetMovable(true)
     historyFrame:EnableMouse(true)
     historyFrame:RegisterForDrag("LeftButton")
-    historyFrame:SetScript("OnDragStart", function(self) self:StartMoving() end)  -- Garantir que StartMoving é chamado no próprio historyFrame
-    historyFrame:SetScript("OnDragStop", function(self) self:StopMovingOrSizing() end)  -- Garantir que StopMovingOrSizing é chamado no próprio historyFrame
+    historyFrame:SetScript("OnDragStart", function(self) self:StartMoving() end)
+    historyFrame:SetScript("OnDragStop", function(self) self:StopMovingOrSizing() end)
     historyFrame:SetPoint("CENTER")
     historyFrame:SetFrameStrata("DIALOG")
     historyFrame:SetBackdrop({ bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background-Dark", tile = true })
 
-    -- cabeçalho
+    -- Cabeçalho
     local header = CreateFrame("Frame", nil, historyFrame)
     header:SetHeight(18)
     header:SetPoint("TOPLEFT", historyFrame, "TOPLEFT", 0, 0)
@@ -33,54 +33,21 @@ function CreateHistoryFrame()
     title:SetTextColor(1, 0.8, 0)
     title:SetText("HISTORY")
 
-    -- close
+    -- Botão fechar
     local closeBtn = CreateFrame("Button", nil, historyFrame, "UIPanelCloseButton")
-    closeBtn:SetSize(16,16)
+    closeBtn:SetSize(16, 16)
     closeBtn:SetPoint("TOPRIGHT", -3, -3)
     closeBtn:SetScript("OnClick", function() historyFrame:Hide() end)
 
-    -- scroll
+    -- Área de scroll
     scrollArea = CreateFrame("ScrollFrame", nil, historyFrame, "UIPanelScrollFrameTemplate")
-    scrollArea:SetSize(285,113)
-    scrollArea:SetPoint("TOPLEFT",5,-23)
+    scrollArea:SetSize(285, 113)
+    scrollArea:SetPoint("TOPLEFT", 5, -23)
     scrollContent = CreateFrame("Frame", nil, scrollArea)
-    scrollContent:SetSize(285,113)
+    scrollContent:SetSize(285, 113)
     scrollArea:SetScrollChild(scrollContent)
---[[
-    -- botão Limpar Tudo
-    local clearBtn = CreateFrame("Button", nil, historyFrame)
-    clearBtn:SetSize(90, 17)
-    clearBtn:SetPoint("BOTTOM", historyFrame, "BOTTOM", 0, 4)
 
-    -- Adicionando um backdrop manual (frame de fundo)
-    local backdrop = clearBtn:CreateTexture(nil, "BACKGROUND")
-    backdrop:SetAllPoints()
-    backdrop:SetColorTexture(0.85, 0.65, 0.1)  -- Cor dourada clara (RGB)
-
-    -- Definindo o texto do botão
-    clearBtn:SetText("Apagar tudo")
-
-    -- Função de clique
-    clearBtn:SetScript("OnClick", function()
-        wipe(ChatMarkersHistory)
-        ShowHistoryWindow()
-    end)
-
- ]]
-
---[[
-    local clearBtn = CreateFrame("Button", nil, historyFrame, "UIPanelButtonTemplate")
-    clearBtn:SetSize(90, 17)
-    clearBtn:SetPoint("BOTTOM", historyFrame, "BOTTOM", 0, 4)
-    clearBtn:SetBackdropColor(0.1, 0.5, 0.1)
-    clearBtn:SetText("Apagar tudo")
-    clearBtn:SetScript("OnClick", function()
-        wipe(ChatMarkersHistory)
-        ShowHistoryWindow()
-    end)
-]]
     historyFrame:Hide()
-
     return historyFrame
 end
 
@@ -88,16 +55,21 @@ function GetHistoryFrame()
     return historyFrame or CreateHistoryFrame()
 end
 
--- função que exibe/atualiza o histórico
+-- Mostrar e atualizar o histórico
 function ShowHistoryWindow()
-    CreateHistoryFrame()       -- garante que scrollContent existe
+    CreateHistoryFrame()
     historyFrame:Show()
 
-    -- limpa todo o conteúdo antigo
-    for _, child in ipairs({scrollContent:GetChildren()}) do child:Hide() end
+    -- Limpar conteúdo antigo
+    for _, child in ipairs({scrollContent:GetChildren()}) do
+        child:Hide()
+    end
 
-    -- popula com cada mensagem do histórico
-    for i, msg in ipairs(ChatMarkersHistory) do
+    -- Preencher com mensagens do histórico
+    local max = ChatMarkersConfig.max_history or 50
+    for i = 1, math.min(#ChatMarkersHistory, max) do
+        local msg = ChatMarkersHistory[i]
+
         local row = CreateFrame("Button", nil, scrollContent, "BackdropTemplate")
         row:SetSize(285, 16)
         row:SetPoint("TOPLEFT", 0, -((i - 1) * 19))
@@ -109,9 +81,9 @@ function ShowHistoryWindow()
         text:SetFont("Fonts\\ARIALN.TTF", 12, "")
         text:SetWidth(260)
         text:SetJustifyH("LEFT")
-        text:SetText( ReplaceMarkersWithIcons(msg) )
+        text:SetText(ReplaceMarkersWithIcons(msg))
 
-        -- botão Apagar
+        -- Botão Apagar
         local deleteBtn = CreateFrame("Button", nil, row)
         deleteBtn:SetSize(12, 12)
         deleteBtn:SetPoint("RIGHT", -15, 0)
@@ -120,14 +92,14 @@ function ShowHistoryWindow()
         local highlight = deleteBtn:GetHighlightTexture()
         highlight:SetPoint("TOPLEFT", 2, -2)
         highlight:SetPoint("BOTTOMRIGHT", -2, 2)
-        highlight:SetVertexColor(1, 0, 0, 0.4)  -- vermelho translúcido
+        highlight:SetVertexColor(1, 0, 0, 0.4)
         SetupDelayedTooltip(deleteBtn, "Apagar")
         deleteBtn:SetScript("OnClick", function()
             table.remove(ChatMarkersHistory, i)
             ShowHistoryWindow()
         end)
 
-        -- botão Reenviar
+        -- Botão Reenviar
         local resendBtn = CreateFrame("Button", nil, row)
         resendBtn:SetSize(12, 12)
         resendBtn:SetPoint("RIGHT", 0, 0)
@@ -148,3 +120,12 @@ function ShowHistoryWindow()
     end
 end
 
+-- Adicionar ao histórico com limite
+function AddToHistory(msg)
+    if not msg or msg == "" then return end
+    table.insert(ChatMarkersHistory, 1, msg)
+    local max = ChatMarkersConfig.max_history or 50
+    while #ChatMarkersHistory > max do
+        table.remove(ChatMarkersHistory)
+    end
+end

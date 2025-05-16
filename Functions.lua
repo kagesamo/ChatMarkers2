@@ -1,19 +1,11 @@
---[[ 
-ChatMarkersConfig = ChatMarkersConfig or {
-    tooltip_delay = 0.8,
-    tooltip_size = 0.8,
-    max_history = 50,
-} 
-]]
-
--- FUNÇÂO TOOLTIP --
+-- FUNÇÃO TOOLTIP --
 function SetupDelayedTooltip(button, text)
     local showTooltipTimer  -- Guarda o temporizador para poder cancelá-lo depois
 
     -- Quando o rato entra no botão
     button:HookScript("OnEnter", function(self)
         -- Inicia um temporizador para mostrar a tooltip após um atraso
-        showTooltipTimer = C_Timer.After(TOOLTIP_DELAY or 0.8, function()
+        showTooltipTimer = C_Timer.After(ChatMarkersConfig.tooltip_delay or 0.8, function()
             -- Garante que o rato ainda está por cima do botão
             if not self:IsMouseOver() then return end
 
@@ -21,9 +13,8 @@ function SetupDelayedTooltip(button, text)
             GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
             GameTooltip:SetText(text, 1, 1, 1)
 
-            if TOOLTIP_SIZE then
-                GameTooltip:SetScale(TOOLTIP_SIZE)
-            end
+            local scale = ChatMarkersConfig.tooltip_size or 0.8
+            GameTooltip:SetScale(scale)
 
             GameTooltip:Show()
         end)
