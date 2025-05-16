@@ -93,7 +93,9 @@ function ShowHistoryWindow()
         highlight:SetPoint("TOPLEFT", 2, -2)
         highlight:SetPoint("BOTTOMRIGHT", -2, 2)
         highlight:SetVertexColor(1, 0, 0, 0.4)
-        SetupDelayedTooltip(deleteBtn, "Apagar")
+        if ChatMarkersConfig.enable_tooltips then
+            SetupDelayedTooltip(deleteBtn, "Apagar")
+        end
         deleteBtn:SetScript("OnClick", function()
             table.remove(ChatMarkersHistory, i)
             ShowHistoryWindow()
@@ -105,7 +107,9 @@ function ShowHistoryWindow()
         resendBtn:SetPoint("RIGHT", 0, 0)
         resendBtn:SetNormalTexture("Interface\\AddOns\\ChatMarkers2\\media\\send_gold.tga")
         resendBtn:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight")
-        SetupDelayedTooltip(resendBtn, "Reenviar")
+        if ChatMarkersConfig.enable_tooltips then
+            SetupDelayedTooltip(resendBtn, "Reenviar")
+        end
         resendBtn:SetScript("OnClick", function()
             if IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
                 SendChatMessage(msg, "INSTANCE_CHAT")

@@ -1,24 +1,25 @@
 ## Interface: 110105
 ## Title: ChatMarkers2
-## Notes: Adiciona uma interface para compor mensagens com raid markers
-## Category-enUS: User Interface
-## Category-deDE: Benutzerinterface
-## Category-esES: Interfaz de usuario
-## Category-esMX: Interfaz de usuario
-## Category-frFR: Interface utilisateur
-## Category-itIT: Interfaccia utente
-## Category-koKR: 사용자 인터페이스
-## Category-ptBR: Interface do usuário
-## Category-ruRU: Интерфейс пользователя
-## Category-zhCN: 用户界面
-## Category-zhTW: 使用者介面
+## Notes: Interface para compor mensagens com raid markers
+## Category-enUS: Chat
+## Category-deDE: Chat
+## Category-esES: Chat
+## Category-esMX: Chat
+## Category-frFR: Discussion
+## Category-itIT: Chat
+## Category-koKR: 대화
+## Category-ptBR: Bate-papo
+## Category-ruRU: Чат
+## Category-zhCN: 聊天
+## Category-zhTW: 對話
 ## Version: 1.0
 ## Author: Kagesamo
 ## SavedVariables: ChatMarkersHistory
 ## SavedVariables: ChatMarkersConfig
 
-
 Functions.lua
 HistoryFrame.lua
 ChatMarkers2.lua
-Config.lua
+ConfigsPlus.lua
+#Config.lua
+#Configs.lua

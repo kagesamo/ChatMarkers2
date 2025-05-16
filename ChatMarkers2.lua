@@ -193,7 +193,9 @@ copyBtn:SetBackdrop({
 copyBtn:SetBackdropColor(0.15, 0.15, 0.15, 0.8)
 copyBtn:SetBackdropBorderColor(0.5, 0.5, 0.5, 0.8)
 copyBtn:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight")
-SetupDelayedTooltip(copyBtn, "Destacar")
+if ChatMarkersConfig.enable_tooltips then
+    SetupDelayedTooltip(copyBtn, "Destacar")
+end
 copyBtn:SetScript("OnClick", function()
     editBox:HighlightText()
     editBox:SetFocus()
