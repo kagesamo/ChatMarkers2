@@ -5,6 +5,7 @@ ChatMarkersHistory = ChatMarkersHistory or {}
 local historyFrame, scrollArea, scrollContent
 
 function CreateHistoryFrame()
+
     if historyFrame then return historyFrame end
 
     historyFrame = CreateFrame("Frame", "ChatMarkersHistoryFrame", UIParent, "BackdropTemplate")

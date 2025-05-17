@@ -16,10 +16,10 @@
 ## Author: Kagesamo
 ## SavedVariables: ChatMarkersHistory
 ## SavedVariables: ChatMarkersConfig
-
+ConfigsPlus.lua
 Functions.lua
 HistoryFrame.lua
 ChatMarkers2.lua
-ConfigsPlus.lua
+
 #Config.lua
 #Configs.lua
