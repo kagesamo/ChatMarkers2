@@ -33,6 +33,7 @@ function SetupDelayedTooltip(button, text)
     end)
 end
 
+
 -- FUNÇÃO REPLACE MARKER TEXT POR ICON NO HISTÓRICO --
 function ReplaceMarkersWithIcons(text)
     if type(text) ~= "string" then return text end
@@ -53,3 +54,39 @@ function ReplaceMarkersWithIcons(text)
     end)
 end
 
+
+-- === Botão flutuante ===
+function CreateFloatingButton(targetFrame)
+    local floatingBtn = CreateFrame("Button", "ChatMarkersFloatingButton", UIParent, "BackdropTemplate")
+    floatingBtn:SetSize(24, 24)
+    floatingBtn:SetPoint("CENTER", UIParent, "CENTER", 300, 0)
+    floatingBtn:SetMovable(true)
+    floatingBtn:EnableMouse(true)
+    floatingBtn:RegisterForDrag("LeftButton")
+    floatingBtn:SetScript("OnDragStart", floatingBtn.StartMoving)
+    floatingBtn:SetScript("OnDragStop", floatingBtn.StopMovingOrSizing)
+
+    local icon = floatingBtn:CreateTexture(nil, "ARTWORK")
+    icon:SetTexture("Interface\\TargetingFrame\\UI-RaidTargetingIcon_3")
+    icon:SetAllPoints(floatingBtn)
+
+    floatingBtn:RegisterForClicks("LeftButtonUp", "RightButtonUp")
+    floatingBtn:SetScript("OnClick", function(self, button)
+        if button == "RightButton" then
+            local hf = GetHistoryFrame()
+            if hf and hf:IsShown() then
+                hf:Hide()
+            else
+                ShowHistoryWindow()
+            end
+        else
+            if targetFrame:IsShown() then
+                targetFrame:Hide()
+            else
+                targetFrame:Show()
+            end
+        end
+    end)
+
+    return floatingBtn
+end

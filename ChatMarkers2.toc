@@ -21,4 +21,4 @@ Configs.lua
 Utils.lua
 HistoryFrame.lua
 #InputFrame.lua
-ChatMarkers2.lua
+Main.lua

@@ -202,36 +202,7 @@ copyBtn:SetScript("OnClick", function()
 end)
 
 -- === Botão flutuante ===
-local floatingBtn = CreateFrame("Button", "ChatMarkersFloatingButton", UIParent, "BackdropTemplate")
-floatingBtn:SetSize(24, 24)
-floatingBtn:SetPoint("CENTER", UIParent, "CENTER", 300, 0)
-floatingBtn:SetMovable(true)
-floatingBtn:EnableMouse(true)
-floatingBtn:RegisterForDrag("LeftButton")
-floatingBtn:SetScript("OnDragStart", floatingBtn.StartMoving)
-floatingBtn:SetScript("OnDragStop", floatingBtn.StopMovingOrSizing)
-
-local icon = floatingBtn:CreateTexture(nil, "ARTWORK")
-icon:SetTexture("Interface\\TargetingFrame\\UI-RaidTargetingIcon_3")
-icon:SetAllPoints(floatingBtn)
-
-floatingBtn:RegisterForClicks("LeftButtonUp", "RightButtonUp")
-floatingBtn:SetScript("OnClick", function(self, button)
-    if button == "RightButton" then
-        local hf = GetHistoryFrame()
-        if hf:IsShown() then
-            hf:Hide()
-        else
-            ShowHistoryWindow()
-        end
-    else
-        if frame:IsShown() then
-            frame:Hide()
-        else
-            frame:Show()
-        end
-    end
-end)
+CreateFloatingButton(frame)
 
 frame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
 frame:Hide()
