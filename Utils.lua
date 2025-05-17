@@ -52,3 +52,4 @@ function ReplaceMarkersWithIcons(text)
         return "{" .. tag .. "}" -- não encontrado: mantém como está
     end)
 end
+

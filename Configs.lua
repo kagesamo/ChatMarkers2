@@ -1,112 +1,135 @@
+-- ========================
+-- Configurações do ChatMarkers2
+-- ========================
+
 ChatMarkersConfig = ChatMarkersConfig or {
     tooltip_delay = 0.8,
     tooltip_size = 0.8,
     max_history = 50,
+    enable_tooltips = true,
 }
 
 local category = Settings.RegisterVerticalLayoutCategory("ChatMarkers2")
 
 local function OnSettingChanged(setting, value)
-	print("Setting changed:", setting:GetVariable(), value)
+    print("Setting changed:", setting:GetVariable(), value)
 end
 
-do
-    local name = "Tooltip delay"
-    local variable = "ChatMarkers2_TooltipDelay"
-	local variableKey = "tooltip_delay"
-	local variableTbl = ChatMarkersConfig
-    local defaultValue = 0.8
-
+-- === Função auxiliar unificada ===
+local function CreateSetting(params)
     local setting = Settings.RegisterAddOnSetting(
         category,
-        variable,
-        variableKey,
-        variableTbl,
-        type(defaultValue),
-        name,
-        defaultValue
+        params.variable,
+        params.key,
+        ChatMarkersConfig,
+        type(params.default),
+        params.name,
+        params.default
     )
-	setting:SetValueChangedCallback(OnSettingChanged)
+    setting:SetValueChangedCallback(OnSettingChanged)
 
-    local tooltip = "Tooltip delay in seconds."
-    local options = Settings.CreateSliderOptions(0.0, 2.0, 0.1)
-	Settings.CreateSlider(category, setting, options, tooltip)
+    local tooltip = params.tooltip or ""
+
+    if type(params.default) == "number" and params.min then
+        local options = Settings.CreateSliderOptions(params.min, params.max, params.step or 1)
+        if params.formatter then
+            options:SetLabelFormatter(params.formatter)
+        end
+        Settings.CreateSlider(category, setting, options, tooltip)
+
+    elseif type(params.default) == "boolean" then
+        Settings.CreateCheckbox(category, setting, tooltip)
+
+    elseif type(params.default) == "string" and params.values then
+        -- Dropdown
+        local options = Settings.CreateDropDownOptions()
+        for _, v in ipairs(params.values) do
+            options:Add(v.value, v.name)
+        end
+        Settings.CreateDropDown(category, setting, options, tooltip)
+
+    elseif type(params.default) == "string" then
+        -- Text input
+        Settings.CreateInput(category, setting, tooltip)
+    end
 end
 
-do
-    local name = "Tooltip size"
-    local variable = "ChatMarkers2_TooltipSize"
-	local variableKey = "tooltip_size"
-	local variableTbl = ChatMarkersConfig
-    local defaultValue = 0.8
+-- === Sliders ===
+CreateSetting{
+    variable = "ChatMarkers2_TooltipDelay",
+    key = "tooltip_delay",
+    name = "Atraso do Tooltip",
+    default = 0.8,
+    min = 0.0,
+    max = 2.0,
+    step = 0.1,
+    tooltip = "Tempo em segundos até o tooltip aparecer."
+}
 
-    local setting = Settings.RegisterAddOnSetting(
-        category,
-        variable,
-        variableKey,
-        variableTbl,
-        type(defaultValue),
-        name,
-        defaultValue
-    )
-	setting:SetValueChangedCallback(OnSettingChanged)
+CreateSetting{
+    variable = "ChatMarkers2_TooltipSize",
+    key = "tooltip_size",
+    name = "Tamanho do Tooltip",
+    default = 0.8,
+    min = 0.5,
+    max = 1.5,
+    step = 0.05,
+    tooltip = "Escala do tooltip (de 0.5 a 1.5)."
+}
 
-    local tooltip = "Tooltip size (0.5 a 1.5)."
-    local options = Settings.CreateSliderOptions(0.5, 1.5, 0.05)
-	Settings.CreateSlider(category, setting, options, tooltip)
-end
+CreateSetting{
+    variable = "ChatMarkers2_HistorySize",
+    key = "max_history",
+    name = "Tamanho do Histórico",
+    default = 50,
+    min = 10,
+    max = 500,
+    step = 1,
+    tooltip = "Número máximo de entradas no histórico."
+}
 
-do
-    local name = "History size"
-    local variable = "ChatMarkers2_HistorySize"
-	local variableKey = "max_history"
-	local variableTbl = ChatMarkersConfig
-    local defaultValue = 50
+-- === Checkbox ===
+CreateSetting{
+    variable = "ChatMarkers2_EnableTooltips",
+    key = "enable_tooltips",
+    name = "Ativar Tooltips",
+    default = true,
+    tooltip = "Ativa ou desativa os tooltips nos botões."
+}
 
-    local setting = Settings.RegisterAddOnSetting(
-        category,
-        variable,
-        variableKey,
-        variableTbl,
-        type(defaultValue),
-        name,
-        defaultValue
-    )
-	setting:SetValueChangedCallback(OnSettingChanged)
-
-    local tooltip = "Número máximo de entradas no histórico."
-    local options = Settings.CreateSliderOptions(10, 500, 1)
-	Settings.CreateSlider(category, setting, options, tooltip)
-end
-
+-- Registar categoria
 Settings.RegisterAddOnCategory(category)
 
---[[
-do
-	-- RegisterProxySetting example. This will run the GetValue and SetValue
-	-- callbacks whenever access to the setting is required.
+--[[ 
+-- === Dropdown ===
+CreateSetting{
+    variable = "ChatMarkers2_MarkerStyle",
+    key = "marker_style",
+    name = "Estilo dos Marcadores",
+    default = "classic",
+    tooltip = "Escolha o estilo visual dos marcadores.",
+    values = {
+        {value = "classic", name = "Clássico"},
+        {value = "modern", name = "Moderno"},
+        {value = "minimal", name = "Minimalista"},
+    }
+}
 
-	local name = "Test Slider"
-	local variable = "MyAddOn_Slider"
-    local defaultValue = 180
-    local minValue = 90
-    local maxValue = 360
-    local step = 10
+-- === Text input ===
+CreateSetting{
+    variable = "ChatMarkers2_CustomPrefix",
+    key = "custom_prefix",
+    name = "Prefixo Personalizado",
+    default = "",
+    tooltip = "Texto que será adicionado antes da mensagem enviada."
+}
+]]
 
-	local function GetValue()
-		return MyAddOn_SavedVars.slider or defaultValue
-	end
+--[[ 
+Como usar no addon
 
-	local function SetValue(value)
-		MyAddOn_SavedVars.slider = value
-	end
-
-	local setting = Settings.RegisterProxySetting(category, variable, type(defaultValue), name, defaultValue, GetValue, SetValue)
-	setting:SetValueChangedCallback(OnSettingChanged)
-
-	local tooltip = "This is a tooltip for the slider."
-    local options = Settings.CreateSliderOptions(minValue, maxValue, step)
-    options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right);
-    Settings.CreateSlider(category, setting, options, tooltip)
+if ChatMarkersConfig.enable_tooltips then
+    -- Mostrar tooltip no botão, por exemplo
 end
+
 ]]
