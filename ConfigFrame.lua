@@ -9,6 +9,8 @@ ChatMarkersConfig = ChatMarkersConfig or {
     enable_tooltips = true,
 }
 
+
+--[[
 local category = Settings.RegisterVerticalLayoutCategory("ChatMarkers2")
 
 local function OnSettingChanged(setting, value)
@@ -100,7 +102,9 @@ CreateSetting{
 -- Registar categoria
 Settings.RegisterAddOnCategory(category)
 
---[[ 
+----------------------
+----------------------
+
 -- === Dropdown ===
 CreateSetting{
     variable = "ChatMarkers2_MarkerStyle",
@@ -125,7 +129,7 @@ CreateSetting{
 }
 ]]
 
---[[ 
+--[[
 Como usar no addon
 
 if ChatMarkersConfig.enable_tooltips then

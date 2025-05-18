@@ -1,36 +1,42 @@
+local _, ChatMarkers2 = ...
+
 -- FUNÇÃO TOOLTIP --
 function SetupDelayedTooltip(button, text)
-    local showTooltipTimer  -- Guarda o temporizador para poder cancelá-lo depois
 
-    -- Quando o rato entra no botão
-    button:HookScript("OnEnter", function(self)
-        -- Inicia um temporizador para mostrar a tooltip após um atraso
-        showTooltipTimer = C_Timer.After(ChatMarkersConfig.tooltip_delay or 0.8, function()
-            -- Garante que o rato ainda está por cima do botão
-            if not self:IsMouseOver() then return end
+    --if ChatMarkersConfig.enable_tooltips then
 
-            -- Mostra a tooltip
-            GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-            GameTooltip:SetText(text, 1, 1, 1)
+        local showTooltipTimer  -- Guarda o temporizador para poder cancelá-lo depois
 
-            local scale = ChatMarkersConfig.tooltip_size or 0.8
-            GameTooltip:SetScale(scale)
+        -- Quando o rato entra no botão
+        button:HookScript("OnEnter", function(self)
+            -- Inicia um temporizador para mostrar a tooltip após um atraso
+            showTooltipTimer = C_Timer.After(ChatMarkersConfig.tooltip_delay or 0.8, function()
+                -- Garante que o rato ainda está por cima do botão
+                if not self:IsMouseOver() then return end
 
-            GameTooltip:Show()
+                -- Mostra a tooltip
+                GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+                GameTooltip:SetText(text, 1, 1, 1)
+
+                local scale = ChatMarkersConfig.tooltip_size or 0.8
+                GameTooltip:SetScale(scale)
+
+                GameTooltip:Show()
+            end)
         end)
-    end)
 
-    -- Quando o rato sai do botão
-    button:HookScript("OnLeave", function()
-        -- Cancela o temporizador se ainda não executou
-        if showTooltipTimer then
-            showTooltipTimer:Cancel()
-            showTooltipTimer = nil
-        end
+        -- Quando o rato sai do botão
+        button:HookScript("OnLeave", function()
+            -- Cancela o temporizador se ainda não executou
+            if showTooltipTimer then
+                showTooltipTimer:Cancel()
+                showTooltipTimer = nil
+            end
 
-        -- Esconde a tooltip
-        GameTooltip:Hide()
-    end)
+            -- Esconde a tooltip
+            GameTooltip:Hide()
+        end)
+    --end
 end
 
 
@@ -56,7 +62,7 @@ end
 
 
 -- === Botão flutuante ===
-function CreateFloatingButton(targetFrame)
+function ChatMarkers2.CreateFloatingButton()
     local floatingBtn = CreateFrame("Button", "ChatMarkersFloatingButton", UIParent, "BackdropTemplate")
     floatingBtn:SetSize(24, 24)
     floatingBtn:SetPoint("CENTER", UIParent, "CENTER", 300, 0)
@@ -73,20 +79,28 @@ function CreateFloatingButton(targetFrame)
     floatingBtn:RegisterForClicks("LeftButtonUp", "RightButtonUp")
     floatingBtn:SetScript("OnClick", function(self, button)
         if button == "RightButton" then
-            local hf = GetHistoryFrame()
-            if hf and hf:IsShown() then
-                hf:Hide()
-            else
-                ShowHistoryWindow()
+            -- Usando função global ou do namespace para abrir/fechar o histórico
+            if ChatMarkers2.GetHistoryFrame and ChatMarkers2.ShowHistoryWindow then
+                local hf = ChatMarkers2.GetHistoryFrame()
+                if hf:IsShown() then
+                    hf:Hide()
+                else
+                    ChatMarkers2.ShowHistoryWindow()
+                end
             end
         else
-            if targetFrame:IsShown() then
-                targetFrame:Hide()
-            else
-                targetFrame:Show()
+            -- Alternar a janela principal
+            if ChatMarkers2.InputFrame then
+                if ChatMarkers2.InputFrame:IsShown() then
+                    ChatMarkers2.InputFrame:Hide()
+                else
+                    ChatMarkers2.InputFrame:Show()
+                end
             end
         end
     end)
 
+    floatingBtn:Show()
+    ChatMarkers2.FloatingBtn = floatingBtn
     return floatingBtn
 end

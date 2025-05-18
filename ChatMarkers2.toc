@@ -17,8 +17,8 @@
 ## SavedVariables: ChatMarkersHistory
 ## SavedVariables: ChatMarkersConfig
 
-Configs.lua
+ConfigFrame.lua
 Utils.lua
+InputFrame.lua
 HistoryFrame.lua
-#InputFrame.lua
 Main.lua

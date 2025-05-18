@@ -1,21 +1,26 @@
+local _, ChatMarkers2 = ...
+
 -- Tabela global de histórico
 ChatMarkersHistory = ChatMarkersHistory or {}
 
--- Frame de histórico e scroll
 local historyFrame, scrollArea, scrollContent
 
-function CreateHistoryFrame()
-
+function ChatMarkers2.CreateHistoryFrame()
     if historyFrame then return historyFrame end
 
+    -- Frame histórico
     historyFrame = CreateFrame("Frame", "ChatMarkersHistoryFrame", UIParent, "BackdropTemplate")
     historyFrame:SetSize(315, 140)
     historyFrame:SetFrameLevel(10)
     historyFrame:SetMovable(true)
     historyFrame:EnableMouse(true)
     historyFrame:RegisterForDrag("LeftButton")
-    historyFrame:SetScript("OnDragStart", function(self) self:StartMoving() end)
-    historyFrame:SetScript("OnDragStop", function(self) self:StopMovingOrSizing() end)
+    historyFrame:SetScript("OnDragStart", function(self)
+        self:StartMoving()
+    end)
+    historyFrame:SetScript("OnDragStop", function(self)
+        self:StopMovingOrSizing()
+    end)
     historyFrame:SetPoint("CENTER")
     historyFrame:SetFrameStrata("DIALOG")
     historyFrame:SetBackdrop({ bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background-Dark", tile = true })
@@ -38,7 +43,9 @@ function CreateHistoryFrame()
     local closeBtn = CreateFrame("Button", nil, historyFrame, "UIPanelCloseButton")
     closeBtn:SetSize(16, 16)
     closeBtn:SetPoint("TOPRIGHT", -3, -3)
-    closeBtn:SetScript("OnClick", function() historyFrame:Hide() end)
+    closeBtn:SetScript("OnClick", function()
+        historyFrame:Hide()
+    end)
 
     -- Área de scroll
     scrollArea = CreateFrame("ScrollFrame", nil, historyFrame, "UIPanelScrollFrameTemplate")
@@ -52,13 +59,12 @@ function CreateHistoryFrame()
     return historyFrame
 end
 
-function GetHistoryFrame()
-    return historyFrame or CreateHistoryFrame()
+function ChatMarkers2.GetHistoryFrame()
+    return historyFrame or ChatMarkers2.CreateHistoryFrame()
 end
 
--- Mostrar e atualizar o histórico
-function ShowHistoryWindow()
-    CreateHistoryFrame()
+function ChatMarkers2.ShowHistoryWindow()
+    ChatMarkers2.CreateHistoryFrame()
     historyFrame:Show()
 
     -- Limpar conteúdo antigo
@@ -94,12 +100,12 @@ function ShowHistoryWindow()
         highlight:SetPoint("TOPLEFT", 2, -2)
         highlight:SetPoint("BOTTOMRIGHT", -2, 2)
         highlight:SetVertexColor(1, 0, 0, 0.4)
-        if ChatMarkersConfig.enable_tooltips then
+        --if ChatMarkersConfig.enable_tooltips then
             SetupDelayedTooltip(deleteBtn, "Apagar")
-        end
+        --end
         deleteBtn:SetScript("OnClick", function()
             table.remove(ChatMarkersHistory, i)
-            ShowHistoryWindow()
+            ChatMarkers2.ShowHistoryWindow()
         end)
 
         -- Botão Reenviar
@@ -108,9 +114,9 @@ function ShowHistoryWindow()
         resendBtn:SetPoint("RIGHT", 0, 0)
         resendBtn:SetNormalTexture("Interface\\AddOns\\ChatMarkers2\\media\\send_gold.tga")
         resendBtn:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight")
-        if ChatMarkersConfig.enable_tooltips then
+        --if ChatMarkersConfig.enable_tooltips then
             SetupDelayedTooltip(resendBtn, "Reenviar")
-        end
+        --end
         resendBtn:SetScript("OnClick", function()
             if IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
                 SendChatMessage(msg, "INSTANCE_CHAT")
@@ -125,8 +131,7 @@ function ShowHistoryWindow()
     end
 end
 
--- Adicionar ao histórico com limite
-function AddToHistory(msg)
+function ChatMarkers2.AddToHistory(msg)
     if not msg or msg == "" then return end
     table.insert(ChatMarkersHistory, 1, msg)
     local max = ChatMarkersConfig.max_history or 50
