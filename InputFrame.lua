@@ -1,5 +1,7 @@
 local _, ChatMarkers2 = ...
 
+local inputFrame
+
 function ChatMarkers2.CreateInputFrame()
 
     local markers = {
@@ -157,14 +159,14 @@ function ChatMarkers2.CreateInputFrame()
     -- Botão enviar --
     local sendBtn = CreateActionButton(actionFrame, "SEND", function()
         local msg = editBox:GetText()
-        local hf = ChatMarkers2.GetHistoryFrame()
+        local hframe = ChatMarkers2.GetHistoryFrame()
         if msg ~= "" then
             ChatMarkers2.AddToHistory(msg)
-            if hf:IsShown() then
+            if hframe:IsShown() then
                 ChatMarkers2.ShowHistoryWindow()
             else
                 ChatMarkers2.ShowHistoryWindow()
-                hf:Hide()
+                hframe:Hide()
             end
         end
 
@@ -216,11 +218,15 @@ function ChatMarkers2.CreateInputFrame()
     closeBtn:SetPoint("TOPRIGHT", 4, 4)
     closeBtn:SetScript("OnClick", function() inputFrame:Hide() end)
 
-    inputFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
-    inputFrame:Hide()
-
     -- Exporta referência da editBox só se precisares noutros módulos
     ChatMarkers2.InputEditBox = editBox
 
+    inputFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
+    inputFrame:Hide()
+
     return inputFrame
+end
+
+function ChatMarkers2.GetInputFrame()
+    return inputFrame or ChatMarkers2.CreateInputFrame()
 end

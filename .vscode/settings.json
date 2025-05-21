@@ -18,6 +18,5 @@
         "LE_PARTY_CATEGORY_INSTANCE",
         "Settings",
         "MinimalSliderWithSteppersMixin"
-    ],
-    "Lua.type.weakUnionCheck": true
+    ]
 }
