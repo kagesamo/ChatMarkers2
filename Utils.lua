@@ -97,7 +97,7 @@ function ChatMarkers2.CreateFloatingButton()
                     ChatMarkers2.MainFrame:Show()
                 end
             end
---[[
+            --[[
             if ChatMarkers2.InputFrame then
                 if ChatMarkers2.InputFrame:IsShown() then
                     ChatMarkers2.InputFrame:Hide()
