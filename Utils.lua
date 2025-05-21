@@ -81,15 +81,23 @@ function ChatMarkers2.CreateFloatingButton()
         if button == "RightButton" then
             -- Usando função global ou do namespace para abrir/fechar o histórico
             if ChatMarkers2.GetHistoryFrame and ChatMarkers2.ShowHistoryWindow then
-                local hf = ChatMarkers2.GetHistoryFrame()
-                if hf:IsShown() then
-                    hf:Hide()
+                local hframe = ChatMarkers2.GetHistoryFrame()
+                if hframe:IsShown() then
+                    hframe:Hide()
                 else
                     ChatMarkers2.ShowHistoryWindow()
                 end
             end
         else
             -- Alternar a janela principal
+            if ChatMarkers2.MainFrame then
+                if ChatMarkers2.MainFrame:IsShown() then
+                    ChatMarkers2.MainFrame:Hide()
+                else
+                    ChatMarkers2.MainFrame:Show()
+                end
+            end
+--[[
             if ChatMarkers2.InputFrame then
                 if ChatMarkers2.InputFrame:IsShown() then
                     ChatMarkers2.InputFrame:Hide()
@@ -97,6 +105,7 @@ function ChatMarkers2.CreateFloatingButton()
                     ChatMarkers2.InputFrame:Show()
                 end
             end
+             ]]
         end
     end)
 
