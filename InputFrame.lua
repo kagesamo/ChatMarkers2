@@ -163,9 +163,9 @@ function ChatMarkers2.CreateInputFrame()
         if msg ~= "" then
             ChatMarkers2.AddToHistory(msg)
             if hframe:IsShown() then
-                ChatMarkers2.ShowHistoryWindow()
+                ChatMarkers2.FillHistoryFrame()
             else
-                ChatMarkers2.ShowHistoryWindow()
+                ChatMarkers2.FillHistoryFrame()
                 hframe:Hide()
             end
         end

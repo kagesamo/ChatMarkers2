@@ -63,7 +63,7 @@ function ChatMarkers2.GetHistoryFrame()
     return historyFrame or ChatMarkers2.CreateHistoryFrame()
 end
 
-function ChatMarkers2.ShowHistoryWindow()
+function ChatMarkers2.FillHistoryFrame()
     ChatMarkers2.CreateHistoryFrame()
     historyFrame:Show()
 
@@ -105,7 +105,7 @@ function ChatMarkers2.ShowHistoryWindow()
         --end
         deleteBtn:SetScript("OnClick", function()
             table.remove(ChatMarkersHistory, i)
-            ChatMarkers2.ShowHistoryWindow()
+            ChatMarkers2.FillHistoryFrame()
         end)
 
         -- Botão Reenviar

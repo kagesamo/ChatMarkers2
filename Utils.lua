@@ -80,12 +80,12 @@ function ChatMarkers2.CreateFloatingButton()
     floatingBtn:SetScript("OnClick", function(self, button)
         if button == "RightButton" then
             -- Usando função global ou do namespace para abrir/fechar o histórico
-            if ChatMarkers2.GetHistoryFrame and ChatMarkers2.ShowHistoryWindow then
+            if ChatMarkers2.GetHistoryFrame and ChatMarkers2.FillHistoryFrame then
                 local hframe = ChatMarkers2.GetHistoryFrame()
                 if hframe:IsShown() then
                     hframe:Hide()
                 else
-                    ChatMarkers2.ShowHistoryWindow()
+                    ChatMarkers2.FillHistoryFrame()
                 end
             end
         else

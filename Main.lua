@@ -60,12 +60,12 @@ function ChatMarkers2.CreateMainFrame()
     historyBtn:SetPoint("TOPLEFT", 110, -25)
     historyBtn:SetText("HISTORY")
     historyBtn:SetScript("OnClick", function()
-        if ChatMarkers2.GetHistoryFrame and ChatMarkers2.ShowHistoryWindow then
+        if ChatMarkers2.GetHistoryFrame and ChatMarkers2.FillHistoryFrame then
             local hframe = ChatMarkers2.GetHistoryFrame()
             if hframe:IsShown() then
                 hframe:Hide()
             else
-                ChatMarkers2.ShowHistoryWindow()
+                ChatMarkers2.FillHistoryFrame()
             end
         end
     end)
