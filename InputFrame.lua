@@ -148,7 +148,7 @@ function ChatMarkers2.CreateInputFrame()
         })
         btn:SetBackdropBorderColor(0.5, 0.5, 0.5, 0.8)
         btn.text = btn:CreateFontString(nil, "OVERLAY")
-        btn.text:SetFont("Fonts\\FRIZQT__.TTF", 13, "")
+        btn.text:SetFont("Fonts\\FRIZQT__.TTF", 12, "")
         btn.text:SetPoint("CENTER", btn, "CENTER", 0, -0.5)
         btn.text:SetText(label)
         btn:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight")
@@ -180,8 +180,27 @@ function ChatMarkers2.CreateInputFrame()
             print("Não estás num grupo, raid ou instância.")
         end
     end)
+    sendBtn:SetSize(40, 21)
     sendBtn:SetPoint("TOPLEFT", inputFrame, "TOPRIGHT", -82, -7)
     sendBtn:SetBackdropColor(0.1, 0.5, 0.1)
+
+    -- Botão guardar --
+    local saveBtn = CreateActionButton(actionFrame, "SAVE", function()
+        local msg = editBox:GetText()
+        local hframe = ChatMarkers2.GetHistoryFrame()
+        if msg ~= "" then
+            ChatMarkers2.AddToHistory(msg)
+            if hframe:IsShown() then
+                ChatMarkers2.FillHistoryFrame()
+            else
+                ChatMarkers2.FillHistoryFrame()
+                hframe:Hide()
+            end
+        end
+    end)
+    saveBtn:SetSize(40, 21)
+    saveBtn:SetPoint("TOP", sendBtn, "RIGHT", -82, -7)
+    saveBtn:SetBackdropColor(0.1, 0.5, 0.1)
 
     -- Botão limpar --
     local clearBtn = CreateActionButton(actionFrame, "CLEAR", function()
