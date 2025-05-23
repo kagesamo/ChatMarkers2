@@ -1,7 +1,7 @@
-local _, ChatMarkers2 = ...
-
 -- Tabela global de histórico
 ChatMarkersHistory = ChatMarkersHistory or {}
+
+local _, ChatMarkers2 = ...
 
 local historyFrame, scrollArea, scrollContent
 
