@@ -1,6 +1,13 @@
 -- Tabela global de histórico
 ChatMarkersHistory = ChatMarkersHistory or {}
 
+ChatMarkersConfig = ChatMarkersConfig or {
+    tooltip_delay = 0.8,
+    tooltip_size = 0.8,
+    max_history = 50,
+    enable_tooltips = true,
+}
+
 local _, ChatMarkers2 = ...
 
 local historyFrame, scrollArea, scrollContent

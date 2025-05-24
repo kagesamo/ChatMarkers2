@@ -134,10 +134,6 @@ function ChatMarkers2.CreateInputFrame()
 
     -- === Botões de ação: ENVIAR / LIMPAR ===
 
---    local actionFrame = CreateFrame("Frame", nil, inputFrame)
---    actionFrame:SetSize(220, 20)
---    actionFrame:SetPoint("BOTTOM", inputFrame, "BOTTOM", 0, 10)
-
     local function CreateActionButton(parent, label, callback)
         local btn = CreateFrame("Button", nil, parent, "BackdropTemplate")
         btn:SetSize(50, 16)
@@ -181,7 +177,6 @@ function ChatMarkers2.CreateInputFrame()
             print("Não estás num grupo, raid ou instância. No entanto, foi guardado no histórico.")
         end
     end)
-    --sendBtn:SetSize(40, 21)
     sendBtn:SetPoint("TOPRIGHT", inputFrame, "TOPRIGHT", -10, -3)
     sendBtn:SetBackdropColor(0.1, 0.5, 0.1)
     SetupDelayedTooltip(sendBtn, "Send to group chat")
@@ -200,7 +195,6 @@ function ChatMarkers2.CreateInputFrame()
             end
         end
     end)
-    --saveBtn:SetSize(40, 21)
     saveBtn:SetPoint("TOP", sendBtn, "BOTTOM", 0, 0)
     saveBtn:SetBackdropColor(0.1, 0.1, 0.5)
     SetupDelayedTooltip(saveBtn, "Save to history")
