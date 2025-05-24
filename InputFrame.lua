@@ -133,13 +133,14 @@ function ChatMarkers2.CreateInputFrame()
     end
 
     -- === Botões de ação: ENVIAR / LIMPAR ===
-    local actionFrame = CreateFrame("Frame", nil, inputFrame)
-    actionFrame:SetSize(220, 20)
-    actionFrame:SetPoint("BOTTOM", inputFrame, "BOTTOM", 0, 10)
+
+--    local actionFrame = CreateFrame("Frame", nil, inputFrame)
+--    actionFrame:SetSize(220, 20)
+--    actionFrame:SetPoint("BOTTOM", inputFrame, "BOTTOM", 0, 10)
 
     local function CreateActionButton(parent, label, callback)
         local btn = CreateFrame("Button", nil, parent, "BackdropTemplate")
-        btn:SetSize(75, 21)
+        btn:SetSize(50, 16)
         btn:SetBackdrop({
             bgFile = "Interface\\Buttons\\WHITE8x8",
             edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
@@ -148,7 +149,7 @@ function ChatMarkers2.CreateInputFrame()
         })
         btn:SetBackdropBorderColor(0.5, 0.5, 0.5, 0.8)
         btn.text = btn:CreateFontString(nil, "OVERLAY")
-        btn.text:SetFont("Fonts\\FRIZQT__.TTF", 12, "")
+        btn.text:SetFont("Fonts\\FRIZQT__.TTF", 10, "")
         btn.text:SetPoint("CENTER", btn, "CENTER", 0, -0.5)
         btn.text:SetText(label)
         btn:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight")
@@ -157,7 +158,7 @@ function ChatMarkers2.CreateInputFrame()
     end
 
     -- Botão enviar --
-    local sendBtn = CreateActionButton(actionFrame, "SEND", function()
+    local sendBtn = CreateActionButton(inputFrame, "SEND", function()
         local msg = editBox:GetText()
         local hframe = ChatMarkers2.GetHistoryFrame()
         if msg ~= "" then
@@ -177,15 +178,16 @@ function ChatMarkers2.CreateInputFrame()
         elseif IsInGroup() then
             SendChatMessage(msg, "PARTY")
         else
-            print("Não estás num grupo, raid ou instância.")
+            print("Não estás num grupo, raid ou instância. No entanto, foi guardado no histórico.")
         end
     end)
-    sendBtn:SetSize(40, 21)
-    sendBtn:SetPoint("TOPLEFT", inputFrame, "TOPRIGHT", -82, -7)
+    --sendBtn:SetSize(40, 21)
+    sendBtn:SetPoint("TOPRIGHT", inputFrame, "TOPRIGHT", -10, -3)
     sendBtn:SetBackdropColor(0.1, 0.5, 0.1)
+    SetupDelayedTooltip(sendBtn, "Send to group chat")
 
     -- Botão guardar --
-    local saveBtn = CreateActionButton(actionFrame, "SAVE", function()
+    local saveBtn = CreateActionButton(inputFrame, "SAVE", function()
         local msg = editBox:GetText()
         local hframe = ChatMarkers2.GetHistoryFrame()
         if msg ~= "" then
@@ -198,17 +200,19 @@ function ChatMarkers2.CreateInputFrame()
             end
         end
     end)
-    saveBtn:SetSize(40, 21)
-    saveBtn:SetPoint("TOP", sendBtn, "RIGHT", -82, -7)
-    saveBtn:SetBackdropColor(0.1, 0.5, 0.1)
+    --saveBtn:SetSize(40, 21)
+    saveBtn:SetPoint("TOP", sendBtn, "BOTTOM", 0, 0)
+    saveBtn:SetBackdropColor(0.1, 0.1, 0.5)
+    SetupDelayedTooltip(saveBtn, "Save to history")
 
     -- Botão limpar --
-    local clearBtn = CreateActionButton(actionFrame, "CLEAR", function()
+    local clearBtn = CreateActionButton(inputFrame, "CLEAR", function()
         editBox:SetText("")
         editBox:SetFocus()
     end)
-    clearBtn:SetPoint("TOP", sendBtn, "BOTTOM", 0, -2)
+    clearBtn:SetPoint("TOP", saveBtn, "BOTTOM", 0, 0)
     clearBtn:SetBackdropColor(0.4, 0.1, 0.1)
+    SetupDelayedTooltip(clearBtn, "Clear text box")
 
     -- === Botão destaque ===
     local highlightBtn = CreateFrame("Button", nil, inputFrame, "BackdropTemplate")
@@ -223,9 +227,9 @@ function ChatMarkers2.CreateInputFrame()
     highlightBtn:SetBackdropColor(0.15, 0.15, 0.15, 0.8)
     highlightBtn:SetBackdropBorderColor(0.5, 0.5, 0.5, 0.8)
     highlightBtn:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight")
-    if ChatMarkersConfig and ChatMarkersConfig.enable_tooltips then
-        SetupDelayedTooltip(highlightBtn, "Destacar")
-    end
+    --if ChatMarkersConfig and ChatMarkersConfig.enable_tooltips then
+        SetupDelayedTooltip(highlightBtn, "Select all text")
+    --end
     highlightBtn:SetScript("OnClick", function()
         editBox:HighlightText()
         editBox:SetFocus()

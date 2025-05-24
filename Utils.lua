@@ -89,6 +89,7 @@ function ChatMarkers2.CreateFloatingButton()
                 end
             end
         else
+            --[[
             -- Alternar a janela principal
             if ChatMarkers2.MainFrame then
                 if ChatMarkers2.MainFrame:IsShown() then
@@ -97,7 +98,7 @@ function ChatMarkers2.CreateFloatingButton()
                     ChatMarkers2.MainFrame:Show()
                 end
             end
-            --[[
+            ]]
             if ChatMarkers2.InputFrame then
                 if ChatMarkers2.InputFrame:IsShown() then
                     ChatMarkers2.InputFrame:Hide()
@@ -105,7 +106,7 @@ function ChatMarkers2.CreateFloatingButton()
                     ChatMarkers2.InputFrame:Show()
                 end
             end
-             ]]
+
         end
     end)
 

@@ -85,11 +85,11 @@ function ChatMarkers2.CreateMainFrame()
 end
 
 
--- Criação da main frame
-ChatMarkers2.MainFrame = ChatMarkers2.CreateMainFrame()
-
 -- Criação do botão flutuante
 ChatMarkers2.FloatingBtn = ChatMarkers2.CreateFloatingButton()
+
+-- Criação da main frame
+ChatMarkers2.MainFrame = ChatMarkers2.CreateMainFrame()
 
 -- Criação da input frame
 ChatMarkers2.InputFrame = ChatMarkers2.CreateInputFrame()
